@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NGO dashboard — FlowReach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="index.html" class="logo">Flow<span>Reach</span></a>
+    <ul>
+      <li><a href="report.html" class="nav-link">Report a need</a></li>
+      <li><a href="dashboard.html" class="nav-link">NGO dashboard</a></li>
+      <li><a href="deliver.html" class="nav-link">Deliver</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="wrap" style="padding-top:40px;">
+  <p class="eyebrow">Step 2 · Match</p>
+  <h1 style="font-size:34px;margin:10px 0 6px;">NGO coordination dashboard</h1>
+  <p style="color:var(--ink-soft);max-width:60ch;">One shared, real-time view of need — so donations go to the most urgent, verified gap, not the loudest request.</p>
+</div>
+
+<section id="dashboard" style="border-top:none;">
+  <div class="wrap">
+    <div class="dash-grid">
+      <div class="panel map-panel">
+        <h3>Need map (illustrative positions)</h3>
+        <svg id="needMap" viewBox="0 0 400 300"></svg>
+      </div>
+      <div class="panel list-panel">
+        <h3>Priority queue</h3>
+        <div id="needList"></div>
+      </div>
+    </div>
+
+    <div class="panel donor-panel">
+      <h3 style="font-family:var(--font-body); font-size:14px; margin-bottom:14px;">Register donor stock &amp; run automated matching</h3>
+      <div class="field-row">
+        <div class="field">
+          <label for="donorName">Donor / drive name</label>
+          <input id="donorName" type="text" placeholder="e.g. Corporate CSR drive">
+        </div>
+        <div class="field">
+          <label for="donorQty">Packs available</label>
+          <input id="donorQty" type="number" min="1" placeholder="e.g. 500">
+        </div>
+        <button id="matchBtn" class="btn btn-primary">Add stock &amp; auto-match</button>
+      </div>
+      <div id="matchLog"></div>
+    </div>
+
+    <p style="margin-top:24px;font-size:14px;">
+      <a href="deliver.html" class="btn btn-ghost">View delivery routes →</a>
+    </p>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>FlowReach — hackathon prototype.</p>
+</footer>
+
+<script src="app.js"></script>
+<script>
+document.querySelectorAll('.nav a.nav-link').forEach(a => {
+  if (a.getAttribute('href') === location.pathname.split('/').pop()) a.classList.add('active');
+});
+</script>
+</body>
+</html>

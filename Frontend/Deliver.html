@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deliver — FlowReach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="index.html" class="logo">Flow<span>Reach</span></a>
+    <ul>
+      <li><a href="report.html" class="nav-link">Report a need</a></li>
+      <li><a href="dashboard.html" class="nav-link">NGO dashboard</a></li>
+      <li><a href="deliver.html" class="nav-link">Deliver</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="wrap" style="padding-top:40px;">
+  <p class="eyebrow">Step 3 · Deliver</p>
+  <h1 style="font-size:34px;margin:10px 0 6px;">Last-mile delivery routes</h1>
+  <p style="color:var(--ink-soft);max-width:60ch;">Matched communities are grouped by region into single delivery runs, so no vehicle makes two trips to the same area.</p>
+</div>
+
+<section id="deliver" style="border-top:none;">
+  <div class="wrap">
+    <div class="route-grid" id="routeGrid"></div>
+
+    <p style="margin-top:24px;font-size:14px;">
+      <a href="dashboard.html" class="btn btn-ghost">← Back to dashboard</a>
+    </p>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>FlowReach — hackathon prototype. Prioritisation is a transparent, rules-based scoring engine today; the same structure is designed to evolve into a machine-learning model as real report-to-delivery data accumulates.</p>
+</footer>
+
+<script src="app.js"></script>
+<script>
+document.querySelectorAll('.nav a.nav-link').forEach(a => {
+  if (a.getAttribute('href') === location.pathname.split('/').pop()) a.classList.add('active');
+});
+</script>
+</body>
+</html>

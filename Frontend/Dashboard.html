@@ -1,78 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NGO dashboard — FlowReach</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="Style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowReach Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Style.css">
+  <style>
+    body {
+      background: #f3ece7;
+    }
+
+    .dashboard-shell {
+      max-width: 1180px;
+      margin: 32px auto 0;
+      padding: 0 20px 40px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .dashboard-sidebar {
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(163,18,63,0.09);
+      border-radius: 24px;
+      padding: 18px 18px 14px;
+      box-shadow: 0 10px 24px rgba(73, 45, 53, 0.06);
+      min-height: 540px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-mini {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 20px;
+      padding-top: 10px;
+    }
+
+    .user-avatar {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #bb2d5e, #9c143f);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--font-display);
+      margin-bottom: 12px;
+      box-shadow: 0 8px 18px rgba(163,18,63,0.2);
+    }
+
+    .user-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .user-role {
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .side-nav {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .side-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      color: var(--ink);
+      font-weight: 500;
+      transition: all 0.2s ease;
+      font-size: 15px;
+    }
+
+    .side-nav a:hover,
+    .side-nav a.active {
+      background: rgba(163,18,63,0.06);
+      color: var(--berry);
+      font-weight: 600;
+    }
+
+    .side-nav a .icon {
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit;
+      font-size: 16px;
+    }
+
+    .logout-row {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid rgba(163, 18, 63, 0.09);
+    }
+
+    .logout-row a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 500;
+      padding: 12px 8px;
+      border-radius: 10px;
+    }
+
+    .logout-row a:hover {
+      background: rgba(163,18,63,0.04);
+    }
+
+    .dashboard-main {
+      display: grid;
+      gap: 20px;
+    }
+
+    .dashboard-card {
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(163,18,63,0.09);
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(73, 45, 53, 0.04);
+      padding: 22px 24px;
+    }
+
+    .dashboard-card .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 18px;
+      font-family: var(--font-display);
+    }
+
+    .card-title .mini-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(163,18,63,0.09);
+      color: var(--berry);
+      font-size: 14px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.4);
+      border: 1px solid rgba(163,18,63,0.08);
+      border-radius: 16px;
+      min-height: 110px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--berry);
+      line-height: 1.1;
+      font-family: var(--font-display);
+    }
+
+    .stat-label {
+      font-size: 15px;
+      color: var(--ink);
+      margin-top: 8px;
+    }
+
+    .dashboard-empty {
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-soft);
+      font-size: 15px;
+      text-align: center;
+      background: rgba(255,255,255,0.18);
+      border-radius: 14px;
+      border: 1px solid rgba(163,18,63,0.05);
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .primary-action {
+      flex: 1 1 320px;
+      text-align: center;
+      padding: 16px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #bc2d5b, #a3123f);
+      color: white;
+      border: none;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(163,18,63,0.24);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .secondary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 220px;
+      padding: 16px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.4);
+      border: 1px solid rgba(163,18,63,0.08);
+      color: var(--ink);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @media (max-width: 940px) {
+      .dashboard-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-sidebar {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 740px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .quick-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .primary-action,
+      .secondary-action {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-
-<header class="site">
-  <div class="nav">
-    <a href="Home.html" class="logo">Flow<span>Reach</span></a>
-    <ul>
-      <li><a href="Home.html" class="nav-link">Home</a></li>
-      <li><a href="Report.html" class="nav-link">Report a need</a></li>
-      <li><a href="Dashboard.html" class="nav-link">NGO dashboard</a></li>
-      <li><a href="Deliver.html" class="nav-link">Deliver</a></li>
-      <li><a href="About.html" class="nav-link">About us</a></li>
-    </ul>
-  </div>
-</header>
-
-<div class="wrap" style="padding-top:40px;">
-  <p class="eyebrow">Step 2 · Match</p>
-  <h1 style="font-size:34px;margin:10px 0 6px;">NGO coordination dashboard</h1>
-  <p style="color:var(--ink-soft);max-width:60ch;">One shared, real-time view of need — so donations go to the most urgent, verified gap, not the loudest request.</p>
-</div>
-
-<section id="dashboard" style="border-top:none;">
-  <div class="wrap">
-    <div class="dash-grid">
-      <div class="panel map-panel">
-        <h3>Need map (illustrative positions)</h3>
-        <svg id="needMap" viewBox="0 0 400 300"></svg>
+  <header class="site">
+    <div class="nav">
+      <div class="logo-wrapper">
+        <a href="Home.html" class="logo">🩸 <span>FlowReach</span></a>
+        <span class="logo-tagline">data-driven</span>
       </div>
-      <div class="panel list-panel">
-        <h3>Priority queue</h3>
-        <div id="needList"></div>
-      </div>
+      <ul>
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="About.html" class="nav-link">About</a></li>
+        <li><a href="Dashboard.html" class="nav-link active">Dashboard</a></li>
+        <li><a href="Contact.html" class="nav-link">Contact</a></li>
+      </ul>
+      <a href="Login.html" class="btn btn-sign-in">👤 Sign in</a>
     </div>
+  </header>
 
-    <div class="panel donor-panel">
-      <h3 style="font-family:var(--font-body); font-size:14px; margin-bottom:14px;">Register donor stock &amp; run automated matching</h3>
-      <div class="field-row">
-        <div class="field">
-          <label for="donorName">Donor / drive name</label>
-          <input id="donorName" type="text" placeholder="e.g. Corporate CSR drive">
-        </div>
-        <div class="field">
-          <label for="donorQty">Packs available</label>
-          <input id="donorQty" type="number" min="1" placeholder="e.g. 500">
-        </div>
-        <button id="matchBtn" class="btn btn-primary">Add stock &amp; auto-match</button>
+  <div class="dashboard-shell">
+    <aside class="dashboard-sidebar">
+      <div class="user-mini">
+        <div class="user-avatar">U</div>
+        <div class="user-name">User</div>
+        <div class="user-role">Community Member</div>
       </div>
-      <div id="matchLog"></div>
-    </div>
 
-    <p style="margin-top:24px;font-size:14px;">
-      <a href="Deliver.html" class="btn btn-ghost">View delivery routes →</a>
-    </p>
+      <nav class="side-nav">
+        <a href="#" class="active"><span class="icon">▣</span>Overview</a>
+        <a href="#"><span class="icon">✦</span>New Request</a>
+        <a href="#"><span class="icon">≡</span>My Requests</a>
+        <a href="#"><span class="icon">▣</span>Track Deliveries</a>
+        <a href="#"><span class="icon">◉</span>Profile</a>
+      </nav>
+
+      <div class="logout-row">
+        <a href="Home.html"><span class="icon">↩</span>Sign Out</a>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <section class="dashboard-card">
+        <div class="card-title"><span class="mini-icon">◔</span> Your Impact</div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Total Requests</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Pending</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">In Transit</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Delivered</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-card">
+        <div class="card-title"><span class="mini-icon">◔</span> Last Delivery</div>
+        <div class="dashboard-empty">No deliveries yet. Submit a request to get started.</div>
+      </section>
+
+      <section class="dashboard-card">
+        <div class="card-title"><span class="mini-icon">⚡</span> Quick Actions</div>
+        <div class="quick-actions">
+          <button class="primary-action">＋ Request Support</button>
+          <button class="secondary-action">🚚 Track Deliveries</button>
+        </div>
+      </section>
+    </main>
   </div>
-</section>
-
-<footer class="wrap">
-  <p>FlowReach — hackathon prototype.</p>
-</footer>
-
-<script src="app.js"></script>
-<script>
-document.querySelectorAll('.nav a.nav-link').forEach(a => {
-  if (a.getAttribute('href') === location.pathname.split('/').pop()) a.classList.add('active');
-});
-</script>
 </body>
 </html>

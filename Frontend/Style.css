@@ -115,6 +115,36 @@ header.site {
     color: var(--berry);
 }
 
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-tagline {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.btn-sign-in {
+    background: var(--berry);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-weight: 600;
+}
+
+.btn-sign-in:hover {
+    background: #8b0f36;
+}
+
 /* ============================================================
    BUTTONS
    ============================================================ */
@@ -159,6 +189,96 @@ header.site {
 .btn-ghost:hover {
     background: rgba(163, 18, 63, 0.08);
     box-shadow: 0 4px 12px rgba(163, 18, 63, 0.15);
+}
+
+/* ============================================================
+   HERO SECTION & COMPONENTS
+   ============================================================ */
+
+.cape-town-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--berry);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+}
+
+.hero h1 .highlight {
+    color: var(--rose);
+    font-weight: 700;
+}
+
+.feature-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+}
+
+.feature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(79, 121, 101, 0.1);
+    color: var(--sage);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.feature-card h3 {
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+}
+
+.feature-list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+}
+
+.feature-list li {
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-list li::before {
+    content: '✓';
+    color: var(--sage);
+    font-weight: 700;
+}
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--berry);
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+.alert-item::before {
+    content: '⚠';
 }
 
 /* ============================================================

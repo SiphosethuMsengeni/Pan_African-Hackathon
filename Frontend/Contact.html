@@ -214,6 +214,7 @@
             <li><a href="Home.html">Home</a></li>
             <li><a href="About.html">About</a></li>
             <li><a href="Dashboard.html">Dashboard</a></li>
+            <li><a href="Stock.html">Stock</a></li>
             <li><a href="Contact.html" class="active">Contact</a></li>
         </ul>
         <a href="Login.html" class="btn-sign-in">👤 Sign in</a>
@@ -256,7 +257,7 @@
                 <div class="info-item-icon">📧</div>
                 <div class="info-item-content">
                     <h3>Email</h3>
-                    <p><a href="mailto:hello@flowreach.org">hello@flowreach.org</a></p>
+                    <p><a href="mailto:hello@yourorganisation.org">hello@yourorganisation.org</a></p>
                 </div>
             </div>
 
@@ -264,7 +265,7 @@
                 <div class="info-item-icon">📞</div>
                 <div class="info-item-content">
                     <h3>Phone</h3>
-                    <p><a href="tel:+27215550199">+27 (0) 21 555 0199</a></p>
+                    <p><a href="tel:+0000000000">+00 000 000 0000</a></p>
                 </div>
             </div>
 
@@ -272,7 +273,7 @@
                 <div class="info-item-icon">📍</div>
                 <div class="info-item-content">
                     <h3>Location</h3>
-                    <p>Cape Town, South Africa</p>
+                    <p>City, Country</p>
                 </div>
             </div>
         </div>
@@ -287,16 +288,32 @@
         });
 
         // Handle form submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
 
-            // Simple validation
-            if (fullName && email && message) {
+            if (!fullName || !email || !message) {
+                alert('Please complete all fields before submitting.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/contacts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullName, email, message })
+                });
+
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Submission failed');
+
                 alert(`Thank you for your message, ${fullName}! We'll get back to you at ${email} soon.`);
                 this.reset();
+            } catch (error) {
+                console.error('Contact save failed:', error);
+                alert('Unable to send your message right now. Please try again later.');
             }
         });
     </script>

@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FlowReach Dashboard</title>
+  <script>
+    // Check authentication before loading page
+    (function() {
+      const user = sessionStorage.getItem('user');
+      if (!user) {
+        window.location.href = 'Login.html';
+      }
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Style.css">
@@ -292,9 +301,16 @@
         <li><a href="Home.html" class="nav-link">Home</a></li>
         <li><a href="About.html" class="nav-link">About</a></li>
         <li><a href="Dashboard.html" class="nav-link active">Dashboard</a></li>
+        <li><a href="Stock.html" class="nav-link">Stock</a></li>
         <li><a href="Contact.html" class="nav-link">Contact</a></li>
       </ul>
-      <a href="Login.html" class="btn btn-sign-in">👤 Sign in</a>
+      <a href="#" onclick="logout(); return false;" class="btn btn-sign-in">👤 Sign out</a>
+      <script>
+        function logout() {
+          sessionStorage.removeItem('user');
+          window.location.href = 'Login.html';
+        }
+      </script>
     </div>
   </header>
 
@@ -324,19 +340,19 @@
         <div class="card-title"><span class="mini-icon">◔</span> Your Impact</div>
         <div class="stats-grid">
           <div class="stat-box">
-            <div class="stat-number">0</div>
+            <div class="stat-number" id="totalRequests">0</div>
             <div class="stat-label">Total Requests</div>
           </div>
           <div class="stat-box">
-            <div class="stat-number">0</div>
+            <div class="stat-number" id="pendingRequests">0</div>
             <div class="stat-label">Pending</div>
           </div>
           <div class="stat-box">
-            <div class="stat-number">0</div>
+            <div class="stat-number" id="inTransitRequests">0</div>
             <div class="stat-label">In Transit</div>
           </div>
           <div class="stat-box">
-            <div class="stat-number">0</div>
+            <div class="stat-number" id="deliveredRequests">0</div>
             <div class="stat-label">Delivered</div>
           </div>
         </div>
@@ -344,17 +360,48 @@
 
       <section class="dashboard-card">
         <div class="card-title"><span class="mini-icon">◔</span> Last Delivery</div>
-        <div class="dashboard-empty">No deliveries yet. Submit a request to get started.</div>
+        <div class="dashboard-empty" id="lastDeliveryInfo">No deliveries yet. Submit a request to get started.</div>
       </section>
 
       <section class="dashboard-card">
         <div class="card-title"><span class="mini-icon">⚡</span> Quick Actions</div>
         <div class="quick-actions">
-          <button class="primary-action">＋ Request Support</button>
-          <button class="secondary-action">🚚 Track Deliveries</button>
+          <button class="primary-action" type="button" onclick="window.location.href='Report.html'">＋ Request Support</button>
+          <button class="secondary-action" type="button" onclick="window.location.href='Deliver.html'">🚚 Track Deliveries</button>
         </div>
       </section>
     </main>
   </div>
+
+  <script src="app.js"></script>
+  <script>
+    async function updateDashboardStats() {
+      try {
+        const needsRes = await fetch('http://localhost:3000/api/needs');
+        const needs = await needsRes.json();
+
+        const total = needs.length;
+        const pending = needs.filter(n => !n.delivered && n.matchedQty === 0).length;
+        const inTransit = needs.filter(n => !n.delivered && n.matchedQty > 0).length;
+        const delivered = needs.filter(n => n.delivered).length;
+
+        document.getElementById('totalRequests').textContent = total;
+        document.getElementById('pendingRequests').textContent = pending;
+        document.getElementById('inTransitRequests').textContent = inTransit;
+        document.getElementById('deliveredRequests').textContent = delivered;
+
+        const lastDelivered = needs.filter(n => n.delivered).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+        const lastDeliveryEl = document.getElementById('lastDeliveryInfo');
+        if (lastDelivered) {
+          lastDeliveryEl.innerHTML = '<div style="text-align:left;padding:12px;"><strong>' + lastDelivered.name + '</strong><br/><span style="font-size:13px;color:var(--ink-soft);">' + lastDelivered.region + ' \u00b7 ' + lastDelivered.matchedQty + ' packs delivered</span></div>';
+        }
+      } catch (error) {
+        console.error('Failed to load dashboard stats:', error);
+      }
+    }
+
+    updateDashboardStats();
+    setInterval(updateDashboardStats, 5000);
+  </script>
 </body>
 </html>

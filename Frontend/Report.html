@@ -20,6 +20,7 @@
       <li><a href="Home.html" class="nav-link">Home</a></li>
       <li><a href="About.html" class="nav-link">About</a></li>
       <li><a href="Dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="Stock.html" class="nav-link">Stock</a></li>
       <li><a href="Contact.html" class="nav-link">Contact</a></li>
     </ul>
     <a href="Login.html" class="btn btn-sign-in">Sign in</a>
@@ -44,11 +45,9 @@
           <label for="region">Region</label>
           <select id="region" required>
             <option value="">Select a region…</option>
-            <option>Khayelitsha</option>
-            <option>Mitchells Plain</option>
-            <option>Delft</option>
-            <option>Gugulethu</option>
-            <option>Nyanga</option>
+            <option>Urban</option>
+            <option>Rural</option>
+            <option>Peri-urban</option>
             <option>Other</option>
           </select>
         </div>
@@ -102,6 +101,49 @@
 document.querySelectorAll('.nav a.nav-link').forEach(a => {
   if (a.getAttribute('href') === location.pathname.split('/').pop()) a.classList.add('active');
 });
+
+const needForm = document.getElementById('needForm');
+if (needForm) {
+  needForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const payload = {
+      name: document.getElementById('name').value.trim(),
+      region: document.getElementById('region').value,
+      population: Number(document.getElementById('population').value),
+      weeks: Number(document.getElementById('weeks').value),
+      stockout: document.getElementById('stockout').value
+    };
+
+    if (!payload.name || !payload.region || !payload.population || !payload.weeks || !payload.stockout) {
+      alert('Please complete all fields before submitting.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/needs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'Submission failed');
+
+      const confirmEl = document.getElementById('reportConfirm');
+      if (confirmEl) {
+        confirmEl.textContent = `Saved successfully: ${payload.name} has been added to the queue.`;
+        confirmEl.style.display = 'block';
+      }
+
+      this.reset();
+      if (window.renderPreview) window.renderPreview();
+    } catch (error) {
+      console.error('Need save failed:', error);
+      alert('Unable to save the report right now. Please try again later.');
+    }
+  });
+}
 </script>
 </body>
 </html>

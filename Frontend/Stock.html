@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Management — FlowReach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Style.css">
+  <style>
+    body {
+      background: #f3ece7;
+    }
+
+    .stock-shell {
+      max-width: 1180px;
+      margin: 32px auto 0;
+      padding: 0 20px 40px;
+    }
+
+    .stock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .stock-header h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 700;
+      font-family: var(--font-display);
+      color: var(--ink);
+    }
+
+    .stock-header .lead {
+      color: var(--ink-soft);
+      font-size: 15px;
+      max-width: 60ch;
+    }
+
+    .stock-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stock-card {
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(163,18,63,0.09);
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(73, 45, 53, 0.04);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-label {
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .card-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--berry);
+      font-family: var(--font-display);
+      line-height: 1;
+    }
+
+    .card-note {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-top: 12px;
+    }
+
+    .full-card {
+      grid-column: 1 / -1;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      font-family: var(--font-display);
+      margin: 32px 0 16px 0;
+    }
+
+    .form-container {
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(163,18,63,0.09);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid rgba(163,18,63,0.12);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--berry);
+      box-shadow: 0 0 0 3px rgba(163,18,63,0.08);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn-add-stock {
+      background: linear-gradient(135deg, #bc2d5b, #a3123f);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(163,18,63,0.24);
+      align-self: flex-start;
+    }
+
+    .btn-add-stock:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(163,18,63,0.32);
+    }
+
+    .list-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(163,18,63,0.09);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .list-table thead {
+      background: rgba(163,18,63,0.04);
+    }
+
+    .list-table th {
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(163,18,63,0.09);
+    }
+
+    .list-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(163,18,63,0.05);
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .list-table tbody tr:hover {
+      background: rgba(163,18,63,0.02);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-available {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+    }
+
+    .status-allocated {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    .status-delivered {
+      background: rgba(168, 85, 247, 0.1);
+      color: #a855f7;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--ink-soft);
+    }
+
+    .empty-state p {
+      font-size: 15px;
+      margin: 12px 0;
+    }
+
+    @media (max-width: 740px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stock-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .list-table {
+        font-size: 12px;
+      }
+
+      .list-table th,
+      .list-table td {
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <div class="nav">
+      <div class="logo-wrapper">
+        <a href="Home.html" class="logo">🩸 <span>FlowReach</span></a>
+        <span class="logo-tagline">data-driven</span>
+      </div>
+      <ul>
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="About.html" class="nav-link">About</a></li>
+        <li><a href="Dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="Stock.html" class="nav-link active">Stock</a></li>
+        <li><a href="Contact.html" class="nav-link">Contact</a></li>
+      </ul>
+      <a href="Login.html" class="btn btn-sign-in">👤 Sign in</a>
+    </div>
+  </header>
+
+  <div class="stock-shell">
+    <div class="stock-header">
+      <div>
+        <h1>Stock Management</h1>
+        <p class="lead">Track donations, inventory levels, and allocations to communities in real-time.</p>
+      </div>
+    </div>
+
+    <div class="stock-grid">
+      <div class="stock-card">
+        <div class="card-label">Total Available</div>
+        <div class="card-value" id="totalStock">0</div>
+        <div class="card-note">packs in inventory</div>
+      </div>
+      <div class="stock-card">
+        <div class="card-label">Allocated</div>
+        <div class="card-value" id="allocatedStock">0</div>
+        <div class="card-note">matched to needs</div>
+      </div>
+      <div class="stock-card">
+        <div class="card-label">Delivered</div>
+        <div class="card-value" id="deliveredStock">0</div>
+        <div class="card-note">completed runs</div>
+      </div>
+    </div>
+
+    <div class="section-title">Add Donation</div>
+    <div class="form-container">
+      <form id="donationForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="donorName">Donor Organization</label>
+            <input type="text" id="donorName" placeholder="e.g., Red Cross, Local NGO" required>
+          </div>
+          <div class="form-group">
+            <label for="donorQty">Number of Packs</label>
+            <input type="number" id="donorQty" min="1" placeholder="e.g., 500" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-add-stock">+ Add to Inventory</button>
+      </form>
+    </div>
+
+    <div class="section-title">Donation History</div>
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Donor</th>
+          <th>Packs Donated</th>
+          <th>Date Received</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="donationList">
+        <tr>
+          <td colspan="4" style="text-align:center;color:var(--ink-soft);">No donations yet. Add one above to get started.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Stock Allocations</div>
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Community</th>
+          <th>Region</th>
+          <th>Need Type</th>
+          <th>Packs Allocated</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="allocationList">
+        <tr>
+          <td colspan="5" style="text-align:center;color:var(--ink-soft);">No allocations yet. Match donations to needs to see them here.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+
+    async function loadStockData() {
+      try {
+        const [donationsRes, needsRes] = await Promise.all([
+          fetch(API_BASE + '/donations'),
+          fetch(API_BASE + '/needs')
+        ]);
+
+        const donations = await donationsRes.json();
+        const needs = await needsRes.json();
+
+        const totalDonated = donations.reduce((sum, d) => sum + d.qty, 0);
+        const totalAllocated = needs.reduce((sum, n) => sum + (n.matchedQty || 0), 0);
+        const totalDelivered = needs.filter(n => n.delivered).reduce((sum, n) => sum + (n.matchedQty || 0), 0);
+        const available = totalDonated - totalAllocated;
+
+        document.getElementById('totalStock').textContent = available;
+        document.getElementById('allocatedStock').textContent = totalAllocated;
+        document.getElementById('deliveredStock').textContent = totalDelivered;
+
+        renderDonations(donations);
+        renderAllocations(needs);
+      } catch (error) {
+        console.error('Failed to load stock data:', error);
+      }
+    }
+
+    function renderDonations(donations) {
+      const tbody = document.getElementById('donationList');
+      if (donations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);">No donations yet. Add one above to get started.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = donations.map(d => {
+        const dateObj = new Date(d.createdAt);
+        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        return `<tr>
+          <td>${d.donorName}</td>
+          <td>${d.qty} packs</td>
+          <td>${dateStr}</td>
+          <td><span class="status-badge status-available">In Stock</span></td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderAllocations(needs) {
+      const tbody = document.getElementById('allocationList');
+      const allocations = needs.filter(n => n.matchedQty > 0);
+
+      if (allocations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--ink-soft);">No allocations yet. Match donations to needs to see them here.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = allocations.map(n => {
+        const status = n.delivered 
+          ? '<span class="status-badge status-delivered">Delivered</span>'
+          : '<span class="status-badge status-allocated">In Transit</span>';
+        return `<tr>
+          <td>${n.name}</td>
+          <td>${n.region}</td>
+          <td>${n.stockout === 'critical' ? '🔴 Critical' : n.stockout === 'low' ? '🟡 Low' : '🟢 None'}</td>
+          <td>${n.matchedQty} packs</td>
+          <td>${status}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    document.getElementById('donationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const donorName = document.getElementById('donorName').value.trim();
+      const qty = Number(document.getElementById('donorQty').value);
+
+      if (!donorName || !qty || qty <= 0) {
+        alert('Please fill in all fields correctly.');
+        return;
+      }
+
+      try {
+        const response = await fetch(API_BASE + '/donations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ donorName, qty })
+        });
+
+        if (!response.ok) throw new Error('Failed to add donation');
+
+        alert(`Added ${qty} packs from ${donorName} to inventory.`);
+        this.reset();
+        loadStockData();
+      } catch (error) {
+        console.error('Donation error:', error);
+        alert('Unable to add donation. Please try again.');
+      }
+    });
+
+    loadStockData();
+    setInterval(loadStockData, 5000);
+  </script>
+</body>
+</html>

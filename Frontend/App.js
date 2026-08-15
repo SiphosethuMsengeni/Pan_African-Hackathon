@@ -1,32 +1,31 @@
-/* ============================================================
-   STATE
-   Persisted to localStorage so that data reported on report.html
-   is still there when you open dashboard.html or deliver.html —
-   each page is a separate file, but they share one "session".
-   ============================================================ */
-const STORAGE_KEY = 'flowreach_state_v1';
+const API_BASE = 'http://localhost:3000/api';
 
-const defaultNeeds = [
-  { id:1, name:"Kwamfundo Primary",   region:"Khayelitsha",     population:420, weeks:11, stockout:"critical", x:30, y:70, matchedQty:0, delivered:false },
-  { id:2, name:"Sisonke Clinic",      region:"Nyanga",          population:180, weeks:6,  stockout:"low",      x:55, y:55, matchedQty:0, delivered:false },
-  { id:3, name:"Delft Youth Shelter", region:"Delft",           population:95,  weeks:14, stockout:"critical", x:70, y:35, matchedQty:0, delivered:false },
-  { id:4, name:"Nolungile High School", region:"Mitchells Plain", population:310, weeks:4, stockout:"low",     x:45, y:80, matchedQty:0, delivered:false },
-  { id:5, name:"Gugulethu Community Hall", region:"Gugulethu",  population:150, weeks:2,  stockout:"none",     x:60, y:20, matchedQty:0, delivered:false },
-];
+let needs = [];
+let donorPool = [];
+let nextNeedId = 1;
 
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  }catch(e){ /* fall through to defaults */ }
-  return { needs: defaultNeeds, donorPool: [], nextNeedId: defaultNeeds.length + 1 };
+async function loadStateFromBackend() {
+  try {
+    const response = await fetch(API_BASE + '/needs');
+    if (!response.ok) {
+      throw new Error('Failed to load needs from backend');
+    }
+
+    needs = await response.json();
+    console.log('Loaded needs from backend:', needs.length);
+  } catch (error) {
+    console.error('Failed to fetch needs from backend:', error);
+    needs = [];
+    alert('Unable to load data from the backend. Please try again later.');
+  }
+  renderAll();
 }
 
-function saveState(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ needs, donorPool, nextNeedId }));
+function saveState() {
+  // Backend is the single source of truth for application data.
 }
 
-let { needs, donorPool, nextNeedId } = loadState();
+loadStateFromBackend();
 
 /* ============================================================
    THE PRIORITISATION ENGINE
@@ -209,23 +208,35 @@ if (needForm){
 }
 
 const matchBtn = document.getElementById('matchBtn');
-if (matchBtn){
-  matchBtn.addEventListener('click', function(){
-    const name = document.getElementById('donorName').value || 'Anonymous donor';
+if (matchBtn) {
+  matchBtn.addEventListener('click', async function() {
+    const name = document.getElementById('donorName').value || 'Donor';
     const qty = Number(document.getElementById('donorQty').value);
     if (!qty || qty <= 0) return;
 
-    donorPool.push({ name, qty });
-    const log = runAutoMatch();
-    saveState();
+    try {
+      const response = await fetch(API_BASE + '/donations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ donorName: name, qty })
+      });
+      if (!response.ok) throw new Error('Failed to save donation');
 
-    const logBox = document.getElementById('matchLog');
-    const header = `<div><strong>${name}</strong> added ${qty} packs to the pool.</div>`;
-    logBox.innerHTML = header + (log.length ? log.map(l => `<div>→ ${l}</div>`).join('') : '<div>No outstanding need to match right now.</div>');
+      donorPool.push({ name, qty });
+      const log = runAutoMatch();
+      saveState();
 
-    document.getElementById('donorName').value = '';
-    document.getElementById('donorQty').value = '';
-    renderAll();
+      const logBox = document.getElementById('matchLog');
+      const header = `<div><strong>${name}</strong> added ${qty} packs to the pool.</div>`;
+      logBox.innerHTML = header + (log.length ? log.map(l => `<div>→ ${l}</div>`).join('') : '<div>No outstanding need to match right now.</div>');
+
+      document.getElementById('donorName').value = '';
+      document.getElementById('donorQty').value = '';
+      renderAll();
+    } catch (error) {
+      console.error('Donation save failed:', error);
+      alert('Unable to save donation. Please try again.');
+    }
   });
 }
 

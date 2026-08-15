@@ -199,6 +199,7 @@
       <li><a href="Home.html" class="nav-link">Home</a></li>
       <li><a href="About.html" class="nav-link">About</a></li>
       <li><a href="Dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="Stock.html" class="nav-link">Stock</a></li>
       <li><a href="Contact.html" class="nav-link">Contact</a></li>
     </ul>
   </div>
@@ -221,34 +222,97 @@
 
   <!-- Right side: Form -->
   <div class="login-form-wrapper">
-    <h2>Sign in</h2>
-    <p class="subtitle">Enter your credentials to access your account</p>
+    <!-- Login Form -->
+    <div id="loginSection" style="display: block;">
+      <h2>Sign in</h2>
+      <p class="subtitle">Enter your credentials to access your account</p>
 
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">Email address</label>
-        <input id="email" type="email" placeholder="community@example.org" required>
-      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="role">I am a...</label>
+          <select id="role" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; font-family: var(--font-body); font-size: 14px; background: var(--paper); cursor: pointer; transition: border-color 0.2s ease, box-shadow 0.2s ease;">
+            <option value="" disabled selected>Select your role</option>
+            <option value="ngo">NGO / Community Member</option>
+            <option value="admin">Admin</option>
+            <option value="sponsor">Sponsor / Donor</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" placeholder="••••••••" required>
-      </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input id="email" type="email" placeholder="community@example.org" required>
+        </div>
 
-      <div class="remember-forgot">
-        <label>
-          <input type="checkbox" name="remember">
-          Remember me
-        </label>
-        <a href="#">Forgot password?</a>
-      </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••••" required>
+        </div>
 
-      <button type="submit" class="login-btn">Sign in</button>
+        <div class="remember-forgot">
+          <label>
+            <input type="checkbox" name="remember">
+            Remember me
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
 
-      <div class="signup-prompt">
-        Don't have an account? <a href="#">Create one here</a>
-      </div>
-    </form>
+        <button type="submit" class="login-btn">Sign in</button>
+
+        <div class="signup-prompt">
+          Don't have an account? <a href="#" onclick="toggleSignUp(); return false;">Create one here</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div id="signupSection" style="display: none;">
+      <h2>Create account</h2>
+      <p class="subtitle">Register your organization to get started</p>
+
+      <form id="signupForm">
+        <div class="form-group">
+          <label for="signupRole">Organization type</label>
+          <select id="signupRole" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; font-family: var(--font-body); font-size: 14px; background: var(--paper); cursor: pointer; transition: border-color 0.2s ease, box-shadow 0.2s ease;">
+            <option value="" disabled selected>Select organization type</option>
+            <option value="ngo">NGO / Community Member</option>
+            <option value="sponsor">Sponsor / Donor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="signupOrgName">Organization name</label>
+          <input id="signupOrgName" type="text" placeholder="Your organization name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signupEmail">Email address</label>
+          <input id="signupEmail" type="email" placeholder="organization@example.org" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signupPassword">Create password</label>
+          <input id="signupPassword" type="password" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signupConfirmPassword">Confirm password</label>
+          <input id="signupConfirmPassword" type="password" placeholder="••••••••" required>
+        </div>
+
+        <div style="margin-bottom: 24px; font-size: 13px; color: var(--ink-soft); line-height: 1.5;">
+          <label style="display: flex; align-items: flex-start; gap: 8px;">
+            <input type="checkbox" id="signupAgree" required style="margin-top: 3px;">
+            <span>I agree to FlowReach's terms and conditions. Our platform is designed to connect communities with donors transparently and fairly.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="login-btn">Create account</button>
+
+        <div class="signup-prompt">
+          Already have an account? <a href="#" onclick="toggleSignUp(); return false;">Sign in here</a>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -261,21 +325,167 @@ document.querySelectorAll('.nav a.nav-link').forEach(a => {
   if (a.getAttribute('href') === location.pathname.split('/').pop()) a.classList.add('active');
 });
 
+// Add focus styles to role select
+const roleSelect = document.getElementById('role');
+if (roleSelect) {
+  roleSelect.addEventListener('focus', function() {
+    this.style.outline = '2px solid var(--berry)';
+    this.style.outlineOffset = '1px';
+    this.style.borderColor = 'var(--berry)';
+  });
+
+  roleSelect.addEventListener('blur', function() {
+    this.style.outline = 'none';
+    this.style.outlineOffset = '0';
+    this.style.borderColor = 'var(--line)';
+  });
+}
+
+// Add focus styles to signup role select
+const signupRoleSelect = document.getElementById('signupRole');
+if (signupRoleSelect) {
+  signupRoleSelect.addEventListener('focus', function() {
+    this.style.outline = '2px solid var(--berry)';
+    this.style.outlineOffset = '1px';
+    this.style.borderColor = 'var(--berry)';
+  });
+
+  signupRoleSelect.addEventListener('blur', function() {
+    this.style.outline = 'none';
+    this.style.outlineOffset = '0';
+    this.style.borderColor = 'var(--line)';
+  });
+}
+
+// Toggle between login and signup sections
+function toggleSignUp() {
+  const loginSection = document.getElementById('loginSection');
+  const signupSection = document.getElementById('signupSection');
+  
+  if (loginSection.style.display === 'none') {
+    loginSection.style.display = 'block';
+    signupSection.style.display = 'none';
+  } else {
+    loginSection.style.display = 'none';
+    signupSection.style.display = 'block';
+  }
+}
+
 // Handle login form submission
-// Redirect to the dashboard after a successful demo login.
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
+  const role = document.getElementById('role').value.trim();
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
+
+  if (!role) {
+    alert('Please select your role.');
+    return;
+  }
 
   if (!email || !password) {
     alert('Please enter both email and password.');
     return;
   }
 
-  console.log('Login attempt:', { email, password });
-  alert('Login successful. Redirecting to your dashboard...');
-  window.location.href = 'Dashboard.html';
+  try {
+    const response = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, role })
+    });
+
+    const result = await response.json();
+    
+    if (!response.ok) {
+      alert(result.message || 'Login failed');
+      return;
+    }
+
+    console.log('Login successful:', result);
+    // Store session data in sessionStorage
+    sessionStorage.setItem('user', JSON.stringify({
+      email: result.user.email,
+      role: result.user.role
+    }));
+    const redirectPath = result.redirect || 'Dashboard.html';
+    alert('Login successful. Redirecting...');
+    window.location.href = redirectPath;
+  } catch (error) {
+    console.error('Login failed:', error);
+    alert('Unable to log in right now. Please try again later.');
+  }
+});
+
+// Handle signup form submission
+document.getElementById('signupForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const role = document.getElementById('signupRole').value.trim();
+  const organizationName = document.getElementById('signupOrgName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value.trim();
+  const confirmPassword = document.getElementById('signupConfirmPassword').value.trim();
+  const agree = document.getElementById('signupAgree').checked;
+
+  if (!role) {
+    alert('Please select your organization type.');
+    return;
+  }
+
+  if (!organizationName) {
+    alert('Please enter your organization name.');
+    return;
+  }
+
+  if (!email) {
+    alert('Please enter your email address.');
+    return;
+  }
+
+  if (!password || !confirmPassword) {
+    alert('Please enter a password.');
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert('Passwords do not match.');
+    return;
+  }
+
+  if (!agree) {
+    alert('Please agree to the terms and conditions.');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        email, 
+        password, 
+        organizationName,
+        role 
+      })
+    });
+
+    const result = await response.json();
+    
+    if (!response.ok) {
+      alert(result.message || 'Sign up failed');
+      return;
+    }
+
+    alert(result.message + ' Redirecting to login...');
+    toggleSignUp(); // Switch back to login form
+    document.getElementById('loginForm').reset();
+    document.getElementById('role').value = role; // Pre-fill role
+    document.getElementById('email').value = email; // Pre-fill email
+  } catch (error) {
+    console.error('Sign up failed:', error);
+    alert('Unable to sign up right now. Please try again later.');
+  }
 });
 </script>
 </body>

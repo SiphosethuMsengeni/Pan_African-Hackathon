@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About FlowReach — Our Mission & Vision</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="Style.css">
+
+<style>
+  .about-section {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 56px;
+  }
+
+  .mission-box, .vision-box, .values-box {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 40px;
+    box-shadow: var(--shadow);
+  }
+
+  .mission-box h2, .vision-box h2, .values-box h2 {
+    font-size: 32px;
+    margin-bottom: 16px;
+    color: var(--berry);
+  }
+
+  .mission-box p, .vision-box p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+  }
+
+  .value-card {
+    background: var(--paper-deep);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid var(--berry);
+  }
+
+  .value-card h3 {
+    font-size: 16px;
+    color: var(--berry);
+    margin-bottom: 8px;
+  }
+
+  .value-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .hero-section {
+    padding: 64px 0 40px;
+  }
+
+  .hero-section h1 {
+    font-size: 44px;
+    line-height: 1.05;
+    margin: 14px 0 18px;
+    color: var(--berry);
+  }
+
+  .hero-section p {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 70ch;
+  }
+</style>
+</head>
+
+<body>
+<header class="site">
+  <div class="nav">
+    <a href="Home.html" class="logo">Flow<span>Reach</span></a>
+    <ul>
+      <li><a href="Home.html" class="nav-link">Home</a></li>
+      <li><a href="Report.html" class="nav-link">Report a need</a></li>
+      <li><a href="Dashboard.html" class="nav-link">NGO dashboard</a></li>
+      <li><a href="Deliver.html" class="nav-link">Deliver</a></li>
+      <li><a href="About.html" class="nav-link">About us</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="wrap hero-section">
+  <p class="eyebrow">About FlowReach</p>
+  <h1>Bridging the gap between generosity and need</h1>
+  <p>FlowReach is building the digital infrastructure to connect menstrual care donations with communities that need them most — eliminating duplication, delay, and uncertainty.</p>
+</div>
+
+<section style="border-top: 1px solid var(--line);">
+  <div class="wrap about-section">
+    <!-- MISSION -->
+    <div class="mission-box">
+      <h2>Our Mission</h2>
+      <p>To create a transparent, efficient coordination system that ensures menstrual care donations reach the right communities at the right time — without duplication, waste, or delay.</p>
+      <p>We believe that access to menstrual care should never be a barrier to school attendance, health, or dignity. By connecting willing donors with verified needs through data-driven matching, we're removing the friction that keeps critical products from reaching the communities that need them most.</p>
+    </div>
+
+    <!-- VISION -->
+    <div class="vision-box">
+      <h2>Our Vision</h2>
+      <p>A future where every girl, woman, and menstruating person in underserved communities has reliable access to menstrual products — where coordination between donors and communities is seamless, transparent, and equitable.</p>
+      <p>We envision FlowReach evolving from a rules-based matching engine into a machine-learning platform that learns from real delivery outcomes, continuously optimizing how donations flow to where they're needed most. At scale, this system can serve as a model for coordinating any essential health product to underserved populations.</p>
+    </div>
+
+    <!-- CORE VALUES -->
+    <div class="values-box">
+      <h2>Core Values</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <h3>Transparency</h3>
+          <p>Every decision is visible. Our matching rules are open-source and explained. Communities see why they were matched or prioritized.</p>
+        </div>
+        <div class="value-card">
+          <h3>Equity</h3>
+          <p>We prioritize the communities with the greatest need. No product goes to duplicate locations while others remain unmet.</p>
+        </div>
+        <div class="value-card">
+          <h3>Dignity</h3>
+          <p>Menstruation is not a shame. Our design centers the voices of those we serve, respecting autonomy and choice.</p>
+        </div>
+        <div class="value-card">
+          <h3>Efficiency</h3>
+          <p>We eliminate waste — whether duplication, delay, or misalignment. Every step is optimized for speed and impact.</p>
+        </div>
+        <div class="value-card">
+          <h3>Data-Driven</h3>
+          <p>Decisions are grounded in verified need, not assumptions. We measure outcomes and adapt based on real-world delivery evidence.</p>
+        </div>
+        <div class="value-card">
+          <h3>Collaboration</h3>
+          <p>We exist to serve communities and amplify NGOs. Our tools are built with, not for, the organizations working on the ground.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>FlowReach — hackathon prototype. Prioritisation is a transparent, rules-based scoring engine today; the same structure is designed to evolve into a machine-learning model as real report-to-delivery data accumulates.</p>
+</footer>
+
+<script>
+document.querySelectorAll('.nav a.nav-link').forEach(a => {
+  if (a.getAttribute('href') === location.pathname.split('/').pop()) a.classList.add('active');
+});
+</script>
+</body>
+</html>
